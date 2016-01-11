@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +94,13 @@ public class SnappyFragment extends Fragment {
         });
         mTextSwitcher.setInAnimation(in);
         mTextSwitcher.setOutAnimation(out);
+        mView.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("Snappy Fragment","Height: "+Integer.toString(mView.getHeight()));
+            }
+        });
+
         return mView;
     }
 
