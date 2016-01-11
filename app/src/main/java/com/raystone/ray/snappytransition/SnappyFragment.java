@@ -1,6 +1,9 @@
 package com.raystone.ray.snappytransition;
 
+import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -16,6 +19,8 @@ import android.widget.ViewSwitcher;
 
 import org.w3c.dom.ProcessingInstruction;
 
+import java.util.Date;
+
 /**
  * Created by Ray on 1/9/2016.
  */
@@ -26,6 +31,9 @@ public class SnappyFragment extends Fragment {
     private Button mButton;
     private static final String[] TEXTS = {"First","Second","Third"};
     private int mPosition = 0;
+    private Button mDatePicker;
+    private static final String DIALOG_DATE = "DialogDate";
+    private static final int REQUEST_DATE = 0;
 
     public static SnappyFragment newInstance()
     {return new SnappyFragment();}
@@ -54,6 +62,16 @@ public class SnappyFragment extends Fragment {
             }
         });
 
+        mDatePicker = (Button)mView.findViewById(R.id.date_picker_button);
+        mDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment datePickerFragment = new DatePickerFragment();
+                datePickerFragment.setTargetFragment(SnappyFragment.this,REQUEST_DATE);
+                datePickerFragment.show(getFragmentManager(),DIALOG_DATE);
+            }
+        });
+
         Animation in = AnimationUtils.loadAnimation(getActivity(),android.R.anim.fade_in);
         Animation out = AnimationUtils.loadAnimation(getActivity(),android.R.anim.fade_out);
         mTextSwitcher = (TextSwitcher)mView.findViewById(R.id.text_switch);
@@ -68,6 +86,23 @@ public class SnappyFragment extends Fragment {
         mTextSwitcher.setInAnimation(in);
         mTextSwitcher.setOutAnimation(out);
         return mView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        switch (requestCode)
+        {
+            case REQUEST_DATE:
+                if(resultCode != Activity.RESULT_OK)
+                    return;
+                else
+                {
+                    Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+                    mDatePicker.setText(date.toString());
+                }
+                break;
+        }
     }
 
 }
