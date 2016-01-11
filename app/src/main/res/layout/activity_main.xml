@@ -33,4 +33,12 @@
         android:layout_centerInParent="true"
         android:background="@android:drawable/edit_text"/>
 
+    <TextView
+        android:id="@+id/text_format"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date_picker_button"
+        android:layout_centerInParent="true"
+        android:text="For more info, visit my home page."/>
+
 </RelativeLayout>

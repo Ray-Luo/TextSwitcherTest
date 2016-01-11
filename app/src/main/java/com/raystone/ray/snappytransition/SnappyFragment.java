@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,7 @@ public class SnappyFragment extends Fragment {
     private Button mDatePicker;
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
+    private TextView mChangeFormat;
 
     public static SnappyFragment newInstance()
     {return new SnappyFragment();}
@@ -71,6 +74,11 @@ public class SnappyFragment extends Fragment {
                 datePickerFragment.show(getFragmentManager(),DIALOG_DATE);
             }
         });
+
+        mChangeFormat = (TextView)mView.findViewById(R.id.text_format);
+        String text = "visit <a href = \"https://play.google.com/store/apps/details?id=com.raystone.ray.goplaces\">my homepage</a>";
+        mChangeFormat.setText(Html.fromHtml(text));
+        mChangeFormat.setMovementMethod(LinkMovementMethod.getInstance());
 
         Animation in = AnimationUtils.loadAnimation(getActivity(),android.R.anim.fade_in);
         Animation out = AnimationUtils.loadAnimation(getActivity(),android.R.anim.fade_out);
