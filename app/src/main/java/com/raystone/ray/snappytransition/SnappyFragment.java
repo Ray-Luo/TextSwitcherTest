@@ -24,6 +24,7 @@ import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 import android.widget.ViewSwitcher;
 
@@ -31,6 +32,7 @@ import android.widget.ViewSwitcher;
 import org.w3c.dom.ProcessingInstruction;
 
 import java.util.Date;
+import java.util.logging.SocketHandler;
 
 /**
  * Created by Ray on 1/9/2016.
@@ -67,7 +69,7 @@ public class SnappyFragment extends Fragment {
     {
         super.onCreateView(inflater,container,savedInstanceState);
 
-        /*
+
         mView = inflater.inflate(R.layout.activity_main,container,false);
 
         mButton = (Button)mView.findViewById(R.id.button);
@@ -111,10 +113,14 @@ public class SnappyFragment extends Fragment {
             @Override
             public void run() {
                 Log.d("Snappy Fragment","Height: "+Integer.toString(mView.getHeight()));
+                Toast toast = Toast.makeText(getActivity(),"Height: "+Integer.toString(mView.getHeight()), Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM|Gravity.RIGHT,100,100);
+                toast.show();
             }
         });
 
-*/
+
+        /*
         if(savedInstanceState == null) {
             mView = inflater.inflate(R.layout.rotate_video, container, false);
             mPortraitContent = (View) mView.findViewById(R.id.main_portrait_content);
@@ -125,9 +131,10 @@ public class SnappyFragment extends Fragment {
                 public void run() {
                     initVideoView();
                 }
-            });
+            });}
+            */
 
-        }return mView;
+        return mView;
     }
 
     @Override
