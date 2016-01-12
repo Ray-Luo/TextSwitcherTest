@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.GradientDrawable;
+
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -16,9 +19,14 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+
+import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.VideoView;
 import android.widget.ViewSwitcher;
+
 
 import org.w3c.dom.ProcessingInstruction;
 
@@ -38,6 +46,9 @@ public class SnappyFragment extends Fragment {
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
     private TextView mChangeFormat;
+    private View mPortraitContent;
+    private VideoView mVideoView;
+    private View mPortraitPosition;
 
     public static SnappyFragment newInstance()
     {return new SnappyFragment();}
@@ -55,6 +66,8 @@ public class SnappyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         super.onCreateView(inflater,container,savedInstanceState);
+
+        /*
         mView = inflater.inflate(R.layout.activity_main,container,false);
 
         mButton = (Button)mView.findViewById(R.id.button);
@@ -101,7 +114,20 @@ public class SnappyFragment extends Fragment {
             }
         });
 
-        return mView;
+*/
+        if(savedInstanceState == null) {
+            mView = inflater.inflate(R.layout.rotate_video, container, false);
+            mPortraitContent = (View) mView.findViewById(R.id.main_portrait_content);
+            mPortraitPosition = (View) mView.findViewById(R.id.main_portrait_position);
+            mVideoView = (VideoView) mView.findViewById(R.id.main_videoview);
+            mVideoView.post(new Runnable() {
+                @Override
+                public void run() {
+                    initVideoView();
+                }
+            });
+
+        }return mView;
     }
 
     @Override
@@ -119,6 +145,55 @@ public class SnappyFragment extends Fragment {
                 }
                 break;
         }
+    }
+
+    private void setVideo()
+    {
+        switch(getResources().getConfiguration().orientation)
+        {
+            case Configuration.ORIENTATION_LANDSCAPE:
+            {
+                mPortraitContent.setVisibility(View.GONE);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup
+                        .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                params.addRule(RelativeLayout.CENTER_IN_PARENT);
+                mVideoView.setLayoutParams(params);
+                break;
+            }
+
+            case Configuration.ORIENTATION_UNDEFINED:
+            case Configuration.ORIENTATION_PORTRAIT:
+            default:
+            {
+                mPortraitContent.setVisibility(View.VISIBLE);
+                int[] locationArray = new int[2];
+                mPortraitPosition.getLocationOnScreen(locationArray);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(mPortraitPosition.getWidth(),mPortraitPosition.getHeight());
+                params.leftMargin = locationArray[0];
+                params.rightMargin = locationArray[1];
+                mVideoView.setLayoutParams(params);
+                break;
+            }
+        }
+    }
+
+    private void initVideoView() {
+        mVideoView.setMediaController(new MediaController(getActivity()));
+
+        // dummy path
+        Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/raw/"
+                + "bigbuck");
+        //raw/bigbuck.m4v  //F:\AndroidStepByStep\SnappyTransition\app\src\main\res\raw\bigbuck.m4v
+        mVideoView.setVideoURI(uri);
+        setVideo();
+        mVideoView.start();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        setVideo();
+        super.onConfigurationChanged(newConfig);
     }
 
 }

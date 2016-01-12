@@ -14,11 +14,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_container);
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.snappy_container);
-        if(fragment == null)
-        {fragment = SnappyFragment.newInstance();}
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.snappy_container,fragment,"SNAPPYFRAGMENT");
-        transaction.addToBackStack(null);
-        transaction.commit();
+        if(fragment == null) {
+            fragment = SnappyFragment.newInstance();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.snappy_container, fragment, "SNAPPYFRAGMENT");
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 }
